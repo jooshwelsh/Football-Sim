@@ -82,6 +82,7 @@ function pun()  {
   if("tb"==poss)  {
     poss="wft"
   }
+  down =0
   ytf=10
   ytg=75
 
@@ -271,25 +272,10 @@ var adjustedtbplay = [];
 //(creatweights(input, newarray))
 createweights(tbplay, adjustedtbplay)
 
-//randomly choose what yardage "based on team average"
-//"20 yard gain" based on stats
-function gain(){
-
-}
-
-//randomly choose what yardage "based on team average"
-//"20 yard gain" based on stats
-function loss(){
-
-
-}
-
-
 
 var gaussian = require('gaussian');
 
 
-//console.log(sample)
 
 function guass(avg,variance){
   var distribution = gaussian(avg,variance);
@@ -564,27 +550,21 @@ function checkfour(down){
       pun()
     }
     else{
-      play()
-    }
+
+     play()
+	}
 
     }
 
   else if (down==4&&poss=='tb'){
     pun()
-    play()
+    playgame()
     }
     else {
       play()
     }
 
 }
-
-
-
-
-
-
-
 
 
 
@@ -602,8 +582,6 @@ function check_time(t1,t2){
   }
 
 }
-
-
 
 
 
