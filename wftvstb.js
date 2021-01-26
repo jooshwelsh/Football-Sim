@@ -55,19 +55,120 @@ function pat()  {
   pun()
 }
 
+// Object or Array. Which every you prefer.
+var fgshort = {
+
+make:99, // Weighted Probability
+miss:1, // Weighted Probability
+
+};
+// Object or Array. Which every you prefer.
+var fgmed = {
+
+make:94, // Weighted Probability
+miss:6, // Weighted Probability
+
+};
+// Object or Array. Which every you prefer.
+var fglong = {
+
+make:80, // Weighted Probability
+miss:20, // Weighted Probability
+
+};
+
+adjustedfgshort=[];
+createweights(fgshort,adjustedfgshort)
+adjustedfgmed=[];
+createweights(fgmed,adjustedfgmed)
+adjustedfglong=[];
+createweights(fglong,adjustedfglong)
+
+adjustedfgshort=shuffle(adjustedfgshort)
+adjustedfgmed=shuffle(adjustedfgmed)
+adjustedfglong=shuffle(adjustedfglong)
 
 // Field Goals
 //Input(s): 1 input: String. "team"--> Scores 3 points!
 //Output(s): 1 input: Integer--> +3
 
-function fg(team)  {
-  if("wft"==team) {
-    wftscore+=3
-    return(wftscore)
+function fg()  {
+  if("wft"==poss) {
+    if(ytg<=29){
+      result=rando(adjustedfgshort)
+      if(result=='make'){
+        console.log("Field Goal is Good!!! ")
+        wftscore+=3
+        console.log("The score of the game is: Wft: " + wftscore + "Tampa " + tbscore)
+      }
+      else{
+        console.log("Field Goal Attempt is no good ")
+        pun()
+      }
+    }
+    else if(ytg<=39){
+      result=rando(adjustedfgmed)
+      if(result=='make'){
+        console.log("Field Goal is Good!!! ")
+        wftscore+=3
+        console.log("The score of the game is: Wft: " + wftscore + "Tampa " + tbscore)
+      }
+      else{
+        console.log("Field Goal Attempt is no good ")
+        pun()
+      }
+    }
+    else if(ytg<=45){
+      result=rando(adjustedfglong)
+      if(result=='make'){
+        console.log("Field Goal is Good!!! ")
+        wftscore+=3
+        console.log("The score of the game is: Wft: " + wftscore + "Tampa " + tbscore)
+      }
+      else{
+        console.log("Field Goal Attempt is no good ")
+        pun()
+      }
+    }
   }
-  if("tb"==team)  {
-    tbscore+=3
-    return(tbscore)
+  if("tb"==poss)  {
+    if(ytg<=29){
+      result=rando(adjustedfgshort)
+      if(result=='make'){
+        console.log("Field Goal is Good!!! ")
+        tbscore+=3
+        console.log("The score of the game is: Wft: " + wftscore + "Tampa " + tbscore)
+      }
+      else{
+        console.log("Field Goal Attempt is no good ")
+        pun()
+      }
+    }
+    else if(ytg<=39){
+      result=rando(adjustedfgmed)
+      if(result=='make'){
+        console.log("Field Goal is Good!!! ")
+        tbscore+=3
+        console.log("The score of the game is: Wft: " + wftscore + "Tampa " + tbscore)
+      }
+      else{
+        console.log("Field Goal Attempt is no good ")
+        pun()
+      }
+    }
+    else if(ytg<=45){
+      result=rando(adjustedfglong)
+      if(result=='make'){
+        console.log("Field Goal is Good!!! ")
+        tbscore+=3
+        console.log("The score of the game is: Wft: " + wftscore + "Tampa " + tbscore)
+      }
+      else{
+        console.log("Field Goal Attempt is no good ")
+        pun()
+      }
+    }
+
   }
 }
 
@@ -79,7 +180,7 @@ function pun()  {
   if("wft"==poss) {
     poss="tb"
   }
-  if("tb"==poss)  {
+  else if("tb"==poss)  {
     poss="wft"
   }
   down =0
@@ -277,6 +378,7 @@ var gaussian = require('gaussian');
 
 
 
+
 function guass(avg,variance){
   var distribution = gaussian(avg,variance);
   // Take a random sample using inverse transform sampling method.
@@ -392,8 +494,6 @@ ytf=ytf-gyards
     ytf=10
   }
   if(ytg<=0){
-    console.log("ytg<0 inside movetc ");
-    console.log("calling td and pat ");
     td();
     pat();
     down=0
@@ -432,8 +532,10 @@ else{
 
 }
 
-movetc(yards)
 
+
+
+movetc(yards)
 }
 
 
@@ -471,11 +573,18 @@ function run(){
 
   if(poss=="wft"){
     yards=guass(avg(wypc),wypcv)
+    if(down==4&&yards<=ytf){
+      to()
+      ytf=10
+      ytg=100-ytg
+      playgame()
+    }
   }
 
 else{
   yards=guass(avg(tbypc),tbypcv)
 }
+
 return Math.floor(yards)
 }
 
@@ -485,22 +594,36 @@ function passc(){
 //Only going to one function call "gain or loss"
 
     if(poss=="wft"){
-      if(guass(avg(wcomp),wcompv)<60){
+      if(guass(avg(wcomp),wcompv)<64.34){
         console.log('incomplete pass ')
 yards=0
+if(down==4){
+  to()
+  ytf=10
+  ytg=100-ytg
+  playgame()
+}
+
       }
       else{
-
 yards=guass(avg(wypp),wyppv)
+console.log('pass completed for '+ yards)
 
+if(down==4&&yards<ytf){
+  to()
+  ytf=10
+  ytg=100-ytg
+  playgame()
+}
       }
 
     }
 
     else{
-if(guass(avg(tbcomp),tbcompv)<60){
+if(guass(avg(tbcomp),tbcompv)<63.95){
   console.log('incomplete pass ')
   yards=0
+
 }
   else{
       yards=guass(avg(tbypp), tbyppv)
@@ -511,19 +634,32 @@ return Math.floor(yards)
 
 }
 
+function sleep(m){
 
+var t=0
+var date=new Date()
+do{
+  datetwo=new Date();
+}
+
+while(datetwo-date<m)
+
+}
 
 
 //looping downs
 //play() function will choose run or pass
 //ask user if they want to go for it
+
 function playgame(){
 var goforit
 
 for(down=1;down<=4;down++){
   console.log(poss)
   console.log("The down is " + down + " the yards to first " + ytf + " the yards to goal " + ytg)
-
+if(poss=="tb"){
+sleep(1000)
+}
 checkfour(down)
 
 
@@ -531,11 +667,15 @@ time1 = time
 time +=.25;
 time2 = time
 check_time(time1,time2)
-
+if(time==60){
+  console.log('The game is OVER ')
+  console.log("The score of the game is Wft:    " + wftscore + " Tampa:    " + tbscore)
+return
+}
 if(time == 13 || time == 28 || time == 43 || time == 58){
   console.log("there are 2 minutes left in the quarter")
 }
-
+console.log(time)
 }
 
 
@@ -547,7 +687,16 @@ function checkfour(down){
 
   goforit=readlineSync.question("Would you like to go for it? (yes/no) ")
     if(goforit=='no'){
-      pun()
+      if(ytg<=45){
+        console.log("WFT is attempting a FG ")
+        fg()
+        pun()
+        playgame()
+      }
+      else {
+        console.log("about to punt ")
+        pun()
+      }
     }
     else{
 
@@ -557,9 +706,17 @@ function checkfour(down){
     }
 
   else if (down==4&&poss=='tb'){
-    pun()
-    playgame()
+    if(ytg<=45){
+      console.log("TB attempting a FG ")
+      fg()
+      pun()
+      playgame()
     }
+    else{
+      pun()
+    playgame()
+  }
+}
     else {
       play()
     }
